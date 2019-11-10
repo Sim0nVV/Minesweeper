@@ -9,7 +9,7 @@
 
 #define BOUNDARIES(i,j) 	if (i < 0 || i >= X_VALUE || j < 0 || j >= Y_VALUE) { continue;}
 #define INPUT_TO_INT(i)		input[i] - 48
-#define SINGLE_DIGIT(i) 	0 <= i && i <= X_VALUE
+#define SINGLE_DIGIT(i) 	(0 <= i && i <= X_VALUE)
 int flags_planted = MINES;
 bool dead = false;
 
@@ -135,7 +135,7 @@ void increment_nearby_cells(int x, int y){ //patroon komt ook voor bij onthullen
 	    if(grid[i][j].mine){
 	       continue;
 	    } else {
-	       grid[i][j].mines_nearby += 1;
+	    grid[i][j].mines_nearby += 1;
 	    }
       }
    }
@@ -170,12 +170,10 @@ void initialize_grid(int n, char *input){
    int y = rand() % Y_VALUE; 
 
    while(grid[x][y].mine || (INPUT_TO_INT(2) == x && INPUT_TO_INT(4) == y)){
-      printf("endlessloop \n");
-      int x = rand() % X_VALUE; 
-      int y = rand() % Y_VALUE; 
+      x = rand() % X_VALUE; 
+      y = rand() % Y_VALUE; 
    }
    grid[x][y].mine = true;
-   // Still bugged
    increment_nearby_cells(x, y);
 
    if(n > 1){
