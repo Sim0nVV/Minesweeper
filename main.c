@@ -13,17 +13,18 @@
 int flags_planted = MINES;
 bool dead = false;
 
-struct Field{
+// Datatype die bevat wat er op een bepaalde coordinaat is
+struct Cell{
    int mines_nearby;
    int mine;
    bool visible;
    bool flag;
 };
 
-struct Field grid[X_VALUE][Y_VALUE] = {0, 0, false, false};
+struct Cell grid[X_VALUE][Y_VALUE] ; //multidimensionale array van structs
 
-char return_char_on(int x, int y, bool visible){ // hier moeten type conversions gebeuren
-   if (grid[x][y].flag){
+char return_char_on(int x, int y, bool visible){ // Op basis van x en y-coordinaat geeft deze de correcte char terug
+   if (grid[x][y].flag){ 			// Boolean visible dient voor te printen met P commando (dus 'debug' mode)
       return 'F';
    } else if(visible || grid[x][y].visible){
       if (grid[x][y].flag){
@@ -31,13 +32,13 @@ char return_char_on(int x, int y, bool visible){ // hier moeten type conversions
       } else if (grid[x][y].mine){
 	 return 'M';
       } else {
-	 return grid[x][y].mines_nearby +48;
+	 return grid[x][y].mines_nearby +48; //conversion naar char
       }}else { 
 	 return ' ';
       }
 }
 
-void print_first_line(){
+void print_first_line(){ // functie print de eerste lijn van het bord (met x-coordinaten dus)
    printf("   ");
    for(int i = 0; i<X_VALUE; i++){
       printf(" %i  ", i);
@@ -45,28 +46,28 @@ void print_first_line(){
    printf("\n");
 }
 
-void print_next_lines(bool visible){
+void print_next_lines(bool visible){ // print het bord zelf. krijgt een boolean binnen die moet tekenen als het P commando gebeurde
    for(int y = 0; y<Y_VALUE; y++){
       printf("%i ", y);
       for(int x = 0; x<X_VALUE; x++){
-	 printf("| %c|", return_char_on(x,y,visible)); //Hangt ervanaf of het volledige veld zichtbaar is of niet
+	 printf("| %c|", return_char_on(x,y,visible)); 
       }	
       printf("\n");
    }
 }
 
-void print_covered_field() {
+void print_covered_field(){ // print het veld in normale speelmodus
    printf("\nRemaining flags: %i\n\n", flags_planted);
    print_first_line();
    print_next_lines(false); // boolean geeft aan of het hele veld getoond moet worden
 }
 
-void print_uncovered_field(){
+void print_uncovered_field(){ // print het veld in 'debug mode'
    print_first_line();
    print_next_lines(true); // boolean geeft aan of hele veld geprint moet worden
 }
 
-void add_flag(int x,int y){
+void toggle_flag(int x,int y){ // zet een vlag aan op x- en y-coordinaat
    if(flags_planted == 0){
       printf("Maximum amount of planted flags reached.\n");
    } else if(grid[x][y].flag) {
@@ -78,8 +79,8 @@ void add_flag(int x,int y){
    }
 }
 
-void reveal(int x, int y){
-   if(!grid[x][y].flag){
+void reveal(int x, int y){ // reveal functie 
+   if(!grid[x][y].flag){ // kan alleen maar reveaelen op plaats zonder vlag
       if(grid[x][y].mines_nearby > 0 && !grid[x][y].mine){
 	 grid[x][y].visible = true;
       } else if (grid[x][y].mine){
@@ -87,7 +88,7 @@ void reveal(int x, int y){
       } else {
 	 for(int i = x - 1; i < x + 2; i++){ // hij gaat erover. Mag niet over grenzen gaan
 	    for(int j = y - 1; j< y + 2; j++){
-	       BOUNDARIES(i,j)
+	       BOUNDARIES(i,j) //test als algoritme niet buiten grenzen spelbord gaat
 		  if(grid[i][j].visible || grid[i][j].mine){
 		     continue;
 		  } else if (grid[i][j].mines_nearby > 0) {
@@ -104,15 +105,15 @@ void reveal(int x, int y){
 }
 
 
-void process_command(char *input){
-   if(!((SINGLE_DIGIT(input[2])) && SINGLE_DIGIT(input[4]))){
+void process_command(char *input){ //input parser
+   if(!((SINGLE_DIGIT(input[2])) && SINGLE_DIGIT(input[4]))){ // check zodat getallen tussen 0 en 9 zijn
       char command = input[0]; // probleem met uitlezen string
       switch (command){
 	 case 'P':
 	    print_uncovered_field();
 	    break;
 	 case 'F':
-	    add_flag(INPUT_TO_INT(2), INPUT_TO_INT(4)); //We geven geen getallen in groter dan 9
+	    toggle_flag(INPUT_TO_INT(2), INPUT_TO_INT(4)); //We geven geen getallen in groter dan 9
 	    print_covered_field();
 	    break;
 	 case 'R':
@@ -128,8 +129,8 @@ void process_command(char *input){
    }
 }
 
-void increment_nearby_cells(int x, int y){ //patroon komt ook voor bij onthullen
-   for(int i = x - 1; i < x + 2; i++){ // hij gaat erover. Mag niet over grenzen gaan
+void increment_nearby_cells(int x, int y){ //Telkens een mijn toegevoegd wordt. incrementeer buren
+   for(int i = x - 1; i < x + 2; i++){ 
       for(int j = y - 1; j< y + 2; j++){
 	 BOUNDARIES(i,j)
 	    if(grid[i][j].mine){
@@ -140,7 +141,7 @@ void increment_nearby_cells(int x, int y){ //patroon komt ook voor bij onthullen
       }
    }
 }
-bool all_mines_covered(){
+bool all_mines_covered(){ // Check als alle mijnen met vlaggen bedekt zijn
    bool check = true;
    for(int x = 0; x< X_VALUE; x++){
       for(int y = 0; y<Y_VALUE; y++){
@@ -152,7 +153,7 @@ bool all_mines_covered(){
    return check;
 }
 
-bool all_non_mines_shown(){
+bool all_non_mines_shown(){ // Check of alle niet-mijnen zichtbaar zijn.
    bool check = true;
    for(int x = 0; x< X_VALUE; x++){
       for(int y = 0; y<Y_VALUE; y++){
@@ -164,15 +165,15 @@ bool all_non_mines_shown(){
    return check;
 }
 
-void initialize_grid(int n, char *input){
+void initialize_grid(int n, char *input){ //initializeer grid, gebeurt na eerste reveal
    
    int x = rand() % X_VALUE; // code die random vakje zoekt, waar nog geen mijn is
    int y = rand() % Y_VALUE; 
 
-   while(grid[x][y].mine || (INPUT_TO_INT(2) == x && INPUT_TO_INT(4) == y)){
+   while(grid[x][y].mine || (INPUT_TO_INT(2) == x && INPUT_TO_INT(4) == y)){ // op die plaats mag er al geen mijn zijn en moet geldige plaats zijn
       x = rand() % X_VALUE; 
       y = rand() % Y_VALUE; 
-   }
+   } 
    grid[x][y].mine = true;
    increment_nearby_cells(x, y);
 
@@ -185,16 +186,16 @@ void initialize_grid(int n, char *input){
 
 int main()
 {
-   srand(time(NULL));
+   srand(time(NULL)); //geef seed aan random generator
    char input[6];
    printf("Insert a Command: R for Reveal, F for Flag, P for show uncovered field\n");
    scanf("%[^\n]%*c",input); 
-   while(input[0] != 'R' || ((SINGLE_DIGIT(input[2])) && SINGLE_DIGIT(input[4]))){
+   while(input[0] != 'R' || ((SINGLE_DIGIT(input[2])) && SINGLE_DIGIT(input[4]))){ //zolang reveal command niet gegeven wordt. initializeer nog niet
       process_command(input);
       scanf("%[^\n]%*c",input); 
    }
    initialize_grid(MINES, input);
-   do {
+   do { // doe minstens 1 keer het scanf commmando.
       scanf("%[^\n]%*c",input); 
       process_command(input);
    }while (input[0] != 'q' && !all_mines_covered() && !dead && !all_non_mines_shown());
