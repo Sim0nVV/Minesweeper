@@ -2,14 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
+#include "macros.h"
 
-#define  MINES  		5
-#define  X_VALUE  		6
-#define  Y_VALUE 		6
-
-#define BOUNDARIES(i,j) 	if (i < 0 || i >= X_VALUE || j < 0 || j >= Y_VALUE) { continue;}
-#define INPUT_TO_INT(i)		input[i] - 48
-#define SINGLE_DIGIT(i) 	(0 <= i && i <= X_VALUE)
 int flags_planted = MINES;
 bool dead = false;
 
@@ -184,8 +178,7 @@ void initialize_grid(int n, char *input){ //initializeer grid, gebeurt na eerste
    }
 }
 
-int main()
-{
+void read_input(){
    srand(time(NULL)); //geef seed aan random generator
    char input[6];
    printf("Insert a Command: R for Reveal, F for Flag, P for show uncovered field\n");
@@ -207,6 +200,12 @@ int main()
    } else if (all_non_mines_shown()){
       printf("All non mines shown. You Won!\n");
    }
+}
+
+int main()
+{
+
+   read_input();
    return 0;
 }
 
