@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <stdbool.h>
 /*
  * Importeer de benodigde functies uit SDL2.
  */
@@ -28,6 +28,8 @@ extern void initialize_gui();
 extern void draw_window();
 extern void free_gui();
 extern void read_input();
+
+bool should_continue;
 
 
 

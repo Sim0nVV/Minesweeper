@@ -22,7 +22,7 @@ int mouse_y = 0;
  * Geeft aan of de applicatie moet verdergaan.
  * Dit is waar zolang de gebruiker de applicatie niet wilt afsluiten door op het kruisje te klikken.
  */
-int should_continue = 1;
+bool should_continue = true;
 
 /*
  * Dit is het venster dat getoond zal worden en waarin het speelveld weergegeven wordt.
@@ -61,7 +61,7 @@ void read_input() {
 	switch (event.type) {
 	case SDL_QUIT:
 		/* De gebruiker heeft op het kruisje van het venster geklikt om de applicatie te stoppen. */
-		should_continue = 0;
+		should_continue = false;
 		break;
 
 	case SDL_MOUSEBUTTONDOWN:
