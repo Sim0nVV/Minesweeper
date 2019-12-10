@@ -13,8 +13,8 @@
  * De hoogte en breedte van het venster (in pixels).
  * Deze dimensies zijn arbitrair gekozen. Deze dimensies hangen mogelijk af van de grootte van het speelveld.
  */
-#define WINDOW_HEIGHT 500
-#define WINDOW_WIDTH 600
+#define WINDOW_HEIGHT 300
+#define WINDOW_WIDTH 300
 
 /*
  * De hoogte en breedte (in pixels) van de afbeeldingen voor de vakjes in het speelveld die getoond worden.

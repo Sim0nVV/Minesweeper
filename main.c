@@ -3,7 +3,6 @@
 
 int main()
 {
-   read_commands();
    initialize_gui();
    while (should_continue) {
       draw_window();

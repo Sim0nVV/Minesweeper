@@ -7,9 +7,12 @@
 #define  X_CELLS  		6
 #define  Y_CELLS 		6
 
-void read_commands();
+extern void read_commands();
+extern char return_char_on(int x, int y, bool visible);
 
 
+void toggle_flag(int x,int y);
+void reveal(int x, int y);
 
 
 #endif
