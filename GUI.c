@@ -1,14 +1,14 @@
 #include "GUI.h"
-#include "macros.h"
+#include "logic.h"
 
 /*
  * Deze renderer wordt gebruikt om figuren in het venster te tekenen. De renderer
  * wordt geïnitialiseerd in de initialize_window-functie.
  */
-static SDL_Renderer *renderer;
+SDL_Renderer *renderer;
 
 /* De afbeelding die een vakje met een "1" in voorstelt. */
-static SDL_Texture *digit_1_texture;
+SDL_Texture *digit_1_texture;
 
 
 /*
@@ -29,7 +29,7 @@ int should_continue = 1;
  * Dit venster wordt aangemaakt bij het initialiseren van de GUI en wordt weer afgebroken
  * wanneer het spel ten einde komt.
  */
-static SDL_Window *window;
+SDL_Window *window;
 
 int is_relevant_event(SDL_Event *event) {
       if (event == NULL) {

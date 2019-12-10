@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
-#include "macros.h"
+#include "logic.h"
 
 
 #define BOUNDARIES(i,j) 	if (i < 0 || i >= X_CELLS || j < 0 || j >= Y_CELLS) { continue;}

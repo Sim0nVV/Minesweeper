@@ -25,7 +25,9 @@
 #define IMAGE_WIDTH 50
 
 extern void initialize_gui();
-extern void draw_window()
+extern void draw_window();
+extern void free_gui();
+extern void read_commands();
 
 
 
