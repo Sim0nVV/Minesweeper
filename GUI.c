@@ -155,6 +155,7 @@ void initialize_textures() {
 	 * Indien de afbeelding niet kon geladen worden (bv. omdat het pad naar de afbeelding verkeerd is),
 	 * geeft SDL_LoadBMP een NULL-pointer terug.
 	 */
+   printf("initialize Textures happens\n");
 	SDL_Surface* digit_1_texture_path = SDL_LoadBMP("Images/1.bmp");
 
 	/*
@@ -165,6 +166,7 @@ void initialize_textures() {
 
 	/* Dealloceer het SDL_Surface dat werd aangemaakt. */
 	SDL_FreeSurface(digit_1_texture_path);
+	printf("after init textrs\n");
 }
 
 /*
@@ -175,14 +177,15 @@ void initialize_gui() {
 	initialize_window("Minesweeper");
 	initialize_textures();
 }
+//
+//int main(int argc, char *argv[]) {
+//	initialize_gui();
+//	while (should_continue) {
+//		draw_window();
+//		read_input();
+//	}
+//	/* Dealloceer al het geheugen dat werd aangemaakt door SDL zelf. */
+//	free_gui();
+//	return 0;
+//}
 
-int main(int argc, char *argv[]) {
-	initialize_gui();
-	while (should_continue) {
-		draw_window();
-		read_input();
-	}
-	/* Dealloceer al het geheugen dat werd aangemaakt door SDL zelf. */
-	free_gui();
-	return 0;
-}

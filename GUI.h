@@ -24,4 +24,10 @@
 #define IMAGE_HEIGHT 50
 #define IMAGE_WIDTH 50
 
+extern void initialize_gui();
+extern void draw_window()
+
+
+
+
 #endif /* GUI_H_ */
