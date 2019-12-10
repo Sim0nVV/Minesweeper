@@ -27,7 +27,7 @@
 extern void initialize_gui();
 extern void draw_window();
 extern void free_gui();
-extern void read_commands();
+extern void read_input();
 
 
 

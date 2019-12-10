@@ -7,7 +7,7 @@ int main()
    initialize_gui();
    while (should_continue) {
       draw_window();
-      read_commands();
+      read_input();
    }
    free_gui();
    return 0;

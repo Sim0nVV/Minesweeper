@@ -155,7 +155,7 @@ void initialize_textures() {
 	 * Indien de afbeelding niet kon geladen worden (bv. omdat het pad naar de afbeelding verkeerd is),
 	 * geeft SDL_LoadBMP een NULL-pointer terug.
 	 */
-   printf("initialize Textures happens\n");
+      	printf("initialize Textures happens\n");
 	SDL_Surface* digit_1_texture_path = SDL_LoadBMP("Images/1.bmp");
 
 	/*
