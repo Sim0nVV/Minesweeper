@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <stdbool.h>
 #include "logic.h"
+#include "struct.h"
 
 
 #define BOUNDARIES(i,j) 	if (i < 0 || i >= X_CELLS || j < 0 || j >= Y_CELLS) { continue;}
@@ -201,6 +201,11 @@ void read_commands(){
       printf("All non mines shown. You Won!\n");
    }
 }
+
+//int main(){
+//   read_commands();
+//   return 0;
+//}
 
 
 

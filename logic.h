@@ -1,20 +1,13 @@
-#include <stdbool.h>
 #ifndef MACROS_H
 #define MACROS_H
+#include <stdbool.h>
+#include <time.h>
 
 #define  MINES  		5
 #define  X_CELLS  		6
 #define  Y_CELLS 		6
 
-struct Cell{
-   int mines_nearby;
-   int mine;
-   bool visible;
-   bool flag;
-};
-
-extern struct Cell grid[X_CELLS][Y_CELLS];
-
+void read_commands();
 
 
 
