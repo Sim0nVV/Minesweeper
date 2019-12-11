@@ -117,12 +117,12 @@ void read_input() {
 		int x = mouse_x / IMAGE_WIDTH;
 		int y = mouse_y / IMAGE_HEIGHT;
 
-			if(event.button.button == SDL_BUTTON_RIGHT){
-				toggle_flag(x,y);
-			} else {
-				reveal(x,y);
+		if(event.button.button == SDL_BUTTON_RIGHT){
+			toggle_flag(x,y);
+		} else {
+			reveal(x,y);
 
-			}
+		}
 		break;
 	}
 }

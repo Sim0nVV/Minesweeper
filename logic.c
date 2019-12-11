@@ -191,7 +191,7 @@ void initialize_grid(int n, int init_x, int init_y){ //initializeer GRID, gebeur
 		initialize_grid(n - 1, init_x, init_y);
 	} else{
 		reveal(init_x,init_y);
-		print_covered_field();
+//		print_covered_field();
 		
 	}
 }
