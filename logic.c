@@ -15,18 +15,27 @@ bool dead = false;
 // Datatype die bevat wat er op een bepaalde coordinaat is
 struct Cell;
 
-struct Cell grid[X_CELLS][Y_CELLS] ; //multidimensionale array van structs
+//struct Cell grid[X_CELLS][Y_CELLS] ; //multidimensionale array van structs
+
+struct Game{
+	struct Cell grid[X_CELLS][Y_CELLS];
+	int width;
+	int height;
+	int mines;
+};
+
+struct Game game;
 
 char return_char_on(int x, int y, bool visible){ // Op basis van x en y-coordinaat geeft deze de correcte char terug
-	if (grid[x][y].flag){ 			// Boolean visible dient voor te printen met P commando (dus 'debug' mode)
+	if (GRID[x][y].flag){ 			// Boolean visible dient voor te printen met P commando (dus 'debug' mode)
 		return 'F';
-	} else if(visible || grid[x][y].visible){
-		if (grid[x][y].flag){
+	} else if(visible || GRID[x][y].visible){
+		if (GRID[x][y].flag){
 			return 'F';
-		} else if (grid[x][y].mine){
+		} else if (GRID[x][y].mine){
 			return 'M';
 		} else {
-			return grid[x][y].mines_nearby + 48; //conversion naar char
+			return GRID[x][y].mines_nearby + 48; //conversion naar char
 		}}else { 
 			return ' ';
 		}
@@ -64,38 +73,38 @@ void print_uncovered_field(){ // print het veld in 'debug mode'
 void toggle_flag(int x,int y){ // zet een vlag aan op x- en y-coordinaat
 	if(flags_planted == 0){
 		printf("Maximum amount of planted flags reached.\n");
-		if(grid[x][y].flag){
-			grid[x][y].flag = !grid[x][y].flag;
+		if(GRID[x][y].flag){
+			GRID[x][y].flag = !GRID[x][y].flag;
 			flags_planted += 1;
 		} else {
-			grid[x][y].flag = !grid[x][y].flag;
+			GRID[x][y].flag = !GRID[x][y].flag;
 			flags_planted -= 1;
 		}
-	} else if(grid[x][y].flag) {
-		grid[x][y].flag = !grid[x][y].flag;
+	} else if(GRID[x][y].flag) {
+		GRID[x][y].flag = !GRID[x][y].flag;
 		flags_planted += 1;
 	} else {
-		grid[x][y].flag = !grid[x][y].flag;
+		GRID[x][y].flag = !GRID[x][y].flag;
 		flags_planted -= 1;
 	}
 }
 
 void reveal(int x, int y){ // reveal functie 
-	if(!grid[x][y].flag){ // kan alleen maar reveaelen op plaats zonder vlag
-		if(grid[x][y].mines_nearby > 0 && !grid[x][y].mine){
-			grid[x][y].visible = true;
-		} else if (grid[x][y].mine){
+	if(!GRID[x][y].flag){ // kan alleen maar reveaelen op plaats zonder vlag
+		if(GRID[x][y].mines_nearby > 0 && !GRID[x][y].mine){
+			GRID[x][y].visible = true;
+		} else if (GRID[x][y].mine){
 			dead = true;
 		} else {
 			for(int i = x - 1; i < x + 2; i++){ // hij gaat erover. Mag niet over grenzen gaan
 				for(int j = y - 1; j< y + 2; j++){
 					BOUNDARIES(i,j) //test als algoritme niet buiten grenzen spelbord gaat
-						if(grid[i][j].visible || grid[i][j].mine){
+						if(GRID[i][j].visible || GRID[i][j].mine){
 							continue;
-						} else if (grid[i][j].mines_nearby > 0) {
-							grid[i][j].visible = true;
+						} else if (GRID[i][j].mines_nearby > 0) {
+							GRID[i][j].visible = true;
 						} else {
-							grid[i][j].visible = true;
+							GRID[i][j].visible = true;
 							reveal(i,j);
 						}
 				}
@@ -134,10 +143,10 @@ void increment_nearby_cells(int x, int y){ //Telkens een mijn toegevoegd wordt. 
 	for(int i = x - 1; i < x + 2; i++){ 
 		for(int j = y - 1; j< y + 2; j++){
 			BOUNDARIES(i,j)
-				if(grid[i][j].mine){
+				if(GRID[i][j].mine){
 					continue;
 				} else {
-					grid[i][j].mines_nearby += 1;
+					GRID[i][j].mines_nearby += 1;
 				}
 		}
 	}
@@ -146,8 +155,8 @@ bool all_mines_covered(){ // Check als alle mijnen met vlaggen bedekt zijn
 	bool check = true;
 	for(int x = 0; x< X_CELLS; x++){
 		for(int y = 0; y<Y_CELLS; y++){
-			if (grid[x][y].mine){
-				check = check && grid[x][y].flag;
+			if (GRID[x][y].mine){
+				check = check && GRID[x][y].flag;
 			}
 		}
 	}
@@ -158,34 +167,36 @@ bool all_non_mines_shown(){ // Check of alle niet-mijnen zichtbaar zijn.
 	bool check = true;
 	for(int x = 0; x< X_CELLS; x++){
 		for(int y = 0; y<Y_CELLS; y++){
-			if (!grid[x][y].mine){
-				check = check && grid[x][y].visible;
+			if (!GRID[x][y].mine){
+				check = check && GRID[x][y].visible;
 			}
 		}
 	}
 	return check;
 }
 
-void initialize_grid(int n, int init_x, int init_y){ //initializeer grid, gebeurt na eerste reveal
+void initialize_grid(int n, int init_x, int init_y){ //initializeer GRID, gebeurt na eerste reveal
 
 	int x = rand() % X_CELLS; // code die random vakje zoekt, waar nog geen mijn is
 	int y = rand() % Y_CELLS; 
 
-	while(grid[x][y].mine || (init_x == x && init_y == y)){ // op die plaats mag er al geen mijn zijn en moet geldige plaats zijn
+	while(GRID[x][y].mine || (init_x == x && init_y == y)){ // op die plaats mag er al geen mijn zijn en moet geldige plaats zijn
 		x = rand() % X_CELLS; 
 		y = rand() % Y_CELLS; 
 	} 
-	grid[x][y].mine = true;
+	GRID[x][y].mine = true;
 	increment_nearby_cells(x, y);
 
 	if(n > 1){
 		initialize_grid(n - 1, init_x, init_y);
 	} else{
 		reveal(init_x,init_y);
+		print_covered_field();
+		
 	}
 }
 bool game_not_ended(){
-	return !dead && !all_mines_covered() && !all_non_mines_shown(); //TODO: verbeter game ended
+	return !dead && !all_mines_covered() && !all_non_mines_shown(); 
 }
 
 void read_commands(){
@@ -201,7 +212,7 @@ void read_commands(){
 	do { // doe minstens 1 keer het scanf commmando.
 		scanf("%[^\n]%*c",input); 
 		process_command(input);
-	} while (input[0] != 'q' && game_not_ended()/*  !all_mines_covered() && !dead && !all_non_mines_shown()*/);
+	} while (input[0] != 'q' && game_not_ended());
 	if (dead){
 		printf("You Pressed On A Mine. GAME OVER\n\n");
 		print_uncovered_field();

@@ -1,9 +1,7 @@
 #include "GUI.h" //TODO: performantieproblemen?
 #include "logic.h"
 
-int main()
-{
-;
+int main(){
    initialize_gui();
    while(!initialized_grid && !pressed_quit){
 	   draw_window();

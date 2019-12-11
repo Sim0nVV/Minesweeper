@@ -74,8 +74,13 @@ void read_init_input() {
 		int x = mouse_x / IMAGE_WIDTH;
 		int y = mouse_y / IMAGE_HEIGHT;
 
-		initialize_grid(MINES, x, y);
-		initialized_grid = true;
+		if (event.button.button == SDL_BUTTON_RIGHT){
+			toggle_flag(x,y);
+		} else {
+			initialize_grid(MINES, x, y);
+			initialized_grid = true;
+
+		}
 
 		break;
 	}

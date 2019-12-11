@@ -7,7 +7,9 @@ struct Cell{
    bool flag;
 };
 
-extern struct Cell grid[X_CELLS][Y_CELLS];
+//extern struct Cell grid[X_CELLS][Y_CELLS];
+
+struct Game;
 
 #endif
 
