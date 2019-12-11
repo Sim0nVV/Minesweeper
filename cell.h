@@ -1,3 +1,5 @@
+#ifndef CELL
+#define CELL
 struct Cell{
    int mines_nearby;
    int mine;
@@ -6,4 +8,6 @@ struct Cell{
 };
 
 extern struct Cell grid[X_CELLS][Y_CELLS];
+
+#endif
 

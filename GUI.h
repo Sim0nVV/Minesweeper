@@ -27,9 +27,14 @@
 extern void initialize_gui();
 extern void draw_window();
 extern void free_gui();
-extern void read_input();
 
-bool should_continue;
+extern void read_input();
+extern void read_init_input();
+
+bool initialized_grid;
+
+
+bool pressed_quit;
 
 
 

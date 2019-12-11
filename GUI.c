@@ -1,6 +1,6 @@
 #include "GUI.h"
 #include "logic.h"
-#include "struct.h"
+#include "cell.h"
 
 /*
  * Deze renderer wordt gebruikt om figuren in het venster te tekenen. De renderer
@@ -33,7 +33,8 @@ int mouse_y = 0;
  * Geeft aan of de applicatie moet verdergaan.
  * Dit is waar zolang de gebruiker de applicatie niet wilt afsluiten door op het kruisje te klikken.
  */
-bool should_continue = true;
+bool pressed_quit = false;
+bool initialized_grid = false;
 
 /*
  * Dit is het venster dat getoond zal worden en waarin het speelveld weergegeven wordt.
@@ -53,6 +54,32 @@ int is_relevant_event(SDL_Event *event) {
  * Vangt de input uit de GUI op. Deze functie is al deels geïmplementeerd, maar je moet die zelf
  * nog afwerken. Je mag natuurlijk alles aanpassen aan deze functie, inclusies return-type en argumenten.
  */
+void read_init_input() {
+	SDL_Event event;
+
+	while (! (SDL_PollEvent(&event) && is_relevant_event(&event))) {}
+
+	switch (event.type) {
+	case SDL_QUIT:
+		pressed_quit = true;
+		break;
+
+	case SDL_MOUSEBUTTONDOWN:
+		/*
+		 * De speler heeft met de muis geklikt: met de onderstaande lijn worden de coördinaten in het
+		 * het speelveld waar de speler geklikt heeft bewaard in de variabelen mouse_x en mouse_y.
+		 */
+		mouse_x = event.button.x;
+		mouse_y = event.button.y;
+		int x = mouse_x / IMAGE_WIDTH;
+		int y = mouse_y / IMAGE_HEIGHT;
+
+		initialize_grid(MINES, x, y);
+		initialized_grid = true;
+
+		break;
+	}
+}
 void read_input() {
 	SDL_Event event;
 
@@ -72,7 +99,7 @@ void read_input() {
 	switch (event.type) {
 	case SDL_QUIT:
 		/* De gebruiker heeft op het kruisje van het venster geklikt om de applicatie te stoppen. */
-		should_continue = false;
+		pressed_quit = true;
 		break;
 
 	case SDL_MOUSEBUTTONDOWN:
@@ -85,13 +112,12 @@ void read_input() {
 		int x = mouse_x / IMAGE_WIDTH;
 		int y = mouse_y / IMAGE_HEIGHT;
 
-		if(event.button.button == SDL_BUTTON_RIGHT){
-		   toggle_flag(x,y);
+			if(event.button.button == SDL_BUTTON_RIGHT){
+				toggle_flag(x,y);
+			} else {
+				reveal(x,y);
 
-		} else {
-		   reveal(x,y);
-
-		}
+			}
 		break;
 	}
 }
@@ -261,7 +287,7 @@ void initialize_gui() {
 //
 //int main(int argc, char *argv[]) {
 //	initialize_gui();
-//	while (should_continue) {
+//	while (not_quit) {
 //		draw_window();
 //		read_input();
 //	}
