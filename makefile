@@ -1,10 +1,10 @@
 CC = gcc
-OBJECTS = main.o GUI.o logic.o
+OBJECTS = main.o GUI.o logic.o io.c
 
 all: $(OBJECTS)
 	$(CC) $(OBJECTS) -lSDL2 -o main
 
-main.o: main.c GUI.h logic.h 
+main.o: main.c GUI.h logic.h io.h
 	$(CC) main.c -c -o main.o
 
 GUI.o: GUI.c GUI.h logic.h cell.h
@@ -12,6 +12,9 @@ GUI.o: GUI.c GUI.h logic.h cell.h
 
 logic.o: logic.c logic.h cell.h
 	$(CC) logic.c -c -o logic.o
+
+io.o: io.c cell.h
+	$(CC) io.c -c -o io.o
 
 
 clean: 
