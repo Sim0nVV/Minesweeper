@@ -9,7 +9,7 @@
 #define INPUT_TO_INT(i)		input[i] - 48
 #define SINGLE_DIGIT(i) 	(0 <= i && i <= X_CELLS)
 
-int flags_planted = MINES;
+int flags_planted; 
 bool dead = false;
 
 // Datatype die bevat wat er op een bepaalde coordinaat is
@@ -175,24 +175,23 @@ bool all_non_mines_shown(){ // Check of alle niet-mijnen zichtbaar zijn.
 	return check;
 }
 
-void initialize_grid(int n, int init_x, int init_y){ //initializeer GRID, gebeurt na eerste reveal
+void initialize_grid(int mines, int init_x, int init_y){ //initializeer GRID, gebeurt na eerste reveal
+	flags_planted = mines;
 
-	int x = rand() % X_CELLS; // code die random vakje zoekt, waar nog geen mijn is
-	int y = rand() % Y_CELLS; 
+	for(int mines_left = mines; mines_left >= 0; mines_left--){
+		printf("mines_left: %i\n", mines_left);
+		int x = rand() % X_CELLS; // code die random vakje zoekt, waar nog geen mijn is
+		int y = rand() % Y_CELLS; 
 
-	while(GRID[x][y].mine || (init_x == x && init_y == y)){ // op die plaats mag er al geen mijn zijn en moet geldige plaats zijn
-		x = rand() % X_CELLS; 
-		y = rand() % Y_CELLS; 
-	} 
-	GRID[x][y].mine = true;
-	increment_nearby_cells(x, y);
+		while(GRID[x][y].mine || (init_x == x && init_y == y)){ // op die plaats mag er al geen mijn zijn en moet geldige plaats zijn
+			x = rand() % X_CELLS; 
+			y = rand() % Y_CELLS; 
+		} 
+		GRID[x][y].mine = true;
+		increment_nearby_cells(x, y);
 
-	if(n > 1){
-		initialize_grid(n - 1, init_x, init_y);
-	} else{
 		reveal(init_x,init_y);
-//		print_covered_field();
-		
+
 	}
 }
 bool game_not_ended(){
@@ -208,7 +207,7 @@ void read_commands(){
 		process_command(input);
 		scanf("%[^\n]%*c",input); 
 	}
-	initialize_grid(MINES, 1, 1);
+	//initialize_grid(MINES, 1, 1);
 	do { // doe minstens 1 keer het scanf commmando.
 		scanf("%[^\n]%*c",input); 
 		process_command(input);

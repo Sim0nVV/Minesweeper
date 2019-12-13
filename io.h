@@ -4,6 +4,6 @@
 #include "cell.h"
 #include "stdio.h"
 
-void read_commandline_args(int argc, char *argv[]);
+int read_commandline_args(int argc, char *argv[]);
 
 #endif /* IO_H_ */

@@ -29,7 +29,7 @@ extern void draw_window();
 extern void free_gui();
 
 extern void read_input();
-extern void read_init_input();
+extern void read_init_input(int mines);
 
 bool initialized_grid;
 

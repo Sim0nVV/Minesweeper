@@ -54,7 +54,7 @@ int is_relevant_event(SDL_Event *event) {
  * Vangt de input uit de GUI op. Deze functie is al deels geïmplementeerd, maar je moet die zelf
  * nog afwerken. Je mag natuurlijk alles aanpassen aan deze functie, inclusies return-type en argumenten.
  */
-void read_init_input() {
+void read_init_input(int mines) {
 	SDL_Event event;
 
 	while (! (SDL_PollEvent(&event) && is_relevant_event(&event))) {}
@@ -73,11 +73,12 @@ void read_init_input() {
 		mouse_y = event.button.y;
 		int x = mouse_x / IMAGE_WIDTH;
 		int y = mouse_y / IMAGE_HEIGHT;
+		printf("Clicked");
 
 		if (event.button.button == SDL_BUTTON_RIGHT){
 			toggle_flag(x,y);
 		} else {
-			initialize_grid(MINES, x, y);
+			initialize_grid(mines, x, y);
 			initialized_grid = true;
 
 		}
