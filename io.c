@@ -3,11 +3,18 @@
 #include <stdlib.h>
 
 void initialize_struct(int w, int h, int m){
-	game =(struct Game*) malloc(sizeof *game  + sizeof **game->grid * w * h);
+
+
+	game =(struct Game*) malloc(sizeof(struct Game));
+	game->grid = malloc(sizeof(struct Cell*) * w);
+
+	for(int i =0; i<w;i++){
+		game->grid[i] = malloc(sizeof(struct Cell)*h);
+	}
+
 
 	printf("W: %i, H:%i, m:%i\n", w,h,m);
 
-	printf("size of game is %lu\n", sizeof **game->grid  * w * h);
 	game->mines = m;
 	game->flags_left = m; // er moeten evenveel mijnen als vlaggen zijn
 	game->width = w;
@@ -58,9 +65,6 @@ int  read_commandline_args(int argc, char *argv[]){
 
 }
 
-void malloc_struct(){
-
-}
 
 /*
    void output_curr_iter(){
@@ -70,10 +74,17 @@ void malloc_struct(){
    void read_txt_file(){
 
    }
-   void free_struct(){
+   */
 
-   }
+void free_struct(){
+	//TODO: Vraag nog eens na of dit correct is
+	for(int i =0; i<game->width;i++){
+		free(game->grid[i]);
+	}
+	free(game->grid);
+	free(game);
 
 
-*/
+}
+
 

@@ -3,11 +3,11 @@
 //--- Library ---//
 #include "stdbool.h"
 
-#define  GRID 			game->grid
+#define  GRID 		game->grid
 
 struct Cell{
    int mines_nearby;
-   int mine;
+   bool mine;
    bool visible;
    bool flag;
 };
@@ -19,6 +19,7 @@ struct Game{
 	int width;
 	int height;
 };
+
 
 struct Game *game;
 

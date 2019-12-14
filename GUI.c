@@ -20,6 +20,7 @@ SDL_Texture *digit_7_texture;
 SDL_Texture *digit_8_texture;
 SDL_Texture *covered_texture;
 SDL_Texture *flagged_texture;
+SDL_Texture *mine_texture;
 
 
 /*
@@ -73,8 +74,6 @@ void read_init_input(int mines) {
 			mouse_y = event.button.y;
 			int x = mouse_x / IMAGE_WIDTH;
 			int y = mouse_y / IMAGE_HEIGHT;
-			printf("entered read init input: Gui.c 59\n");
-			printf("Clicked\n");
 
 			initialize_grid(mines, x, y);
 			printf("After initialize grid\n");
@@ -120,6 +119,7 @@ void read_input() {
 				toggle_flag(x,y);
 			} else {
 				reveal(x,y);
+				printf("reveal(%i,%i) happens \n", x, y);
 
 			}
 			break;
@@ -141,16 +141,16 @@ void draw_window() {
 	SDL_Texture * texture;
 	for(int x = 0; x < game->width; x++){
 		for(int y = 0; y < game->height; y++){
-			printf("loop happens \n");
 			SDL_Rect rectangle = {IMAGE_WIDTH * x, IMAGE_HEIGHT * y, IMAGE_WIDTH, IMAGE_HEIGHT };
 			if(initialized_grid){
 				char c = return_char_on(x,y,false);
-				printf("after ret char\n");
 				char c_int = c - '0';
 				if(c == 'F'){
 					texture = flagged_texture;
 				}else if (c == ' '){
 					texture = covered_texture;
+				}else if (c == 'M'){
+					texture = mine_texture;
 				}else if (c_int >= 0 && c_int < 9){
 					switch(c_int){
 						case 0: texture = digit_0_texture; break;
@@ -225,6 +225,7 @@ void free_gui() {
 	SDL_DestroyTexture(digit_8_texture);
 	SDL_DestroyTexture(covered_texture);
 	SDL_DestroyTexture(flagged_texture);
+	SDL_DestroyTexture(mine_texture);
 
 	/* Dealloceert het venster. */
 	SDL_DestroyWindow(window);
@@ -256,6 +257,7 @@ void initialize_textures() {
 	SDL_Surface* digit_8_texture_path = SDL_LoadBMP("Images/8.bmp");
 	SDL_Surface* covered_texture_path = SDL_LoadBMP("Images/covered.bmp");
 	SDL_Surface* flagged_texture_path = SDL_LoadBMP("Images/flagged.bmp");
+	SDL_Surface* mine_texture_path = SDL_LoadBMP("Images/mine.bmp");
 
 
 	/*
@@ -273,6 +275,7 @@ void initialize_textures() {
 	digit_8_texture = SDL_CreateTextureFromSurface(renderer, digit_8_texture_path);
 	flagged_texture = SDL_CreateTextureFromSurface(renderer, flagged_texture_path);
 	covered_texture = SDL_CreateTextureFromSurface(renderer, covered_texture_path);
+	mine_texture = SDL_CreateTextureFromSurface(renderer, mine_texture_path);
 
 	/* Dealloceer het SDL_Surface dat werd aangemaakt. */
 	SDL_FreeSurface(digit_0_texture_path);
@@ -286,6 +289,7 @@ void initialize_textures() {
 	SDL_FreeSurface(digit_8_texture_path);
 	SDL_FreeSurface(covered_texture_path);
 	SDL_FreeSurface(flagged_texture_path);
+	SDL_FreeSurface(mine_texture_path);
 }
 
 /*

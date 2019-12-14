@@ -17,13 +17,14 @@ struct Cell;
 
 //struct Cell grid[game->width][game->height] ; //multidimensionale array van structs
 /*
-struct Game{
-	struct Cell grid[game->width][game->height];
-	int width;
-	int height;
-	int mines;
-};
-*/
+   struct Game{
+   struct Cell grid[game->width][game->height];
+   int width;
+   int height;
+   int mines;
+   };
+   */
+
 char return_char_on(int x, int y, bool visible){ // Op basis van x en y-coordinaat geeft deze de correcte char terug
 	if (GRID[x][y].flag){ 	// Boolean visible dient voor te printen met P commando (dus 'debug' mode)
 		return 'F';
@@ -34,9 +35,10 @@ char return_char_on(int x, int y, bool visible){ // Op basis van x en y-coordina
 			return 'M';
 		} else {
 			return GRID[x][y].mines_nearby + 48; //conversion naar char
-		}}else { 
-			return ' ';
 		}
+	}else { 
+		return ' ';
+	}
 }
 
 void print_first_line(){ // functie print de eerste lijn van het bord (met x-coordinaten dus)
@@ -158,6 +160,7 @@ bool all_mines_covered(){ // Check als alle mijnen met vlaggen bedekt zijn
 			}
 		}
 	}
+	printf("all mines covered happen\n");
 	return check;
 }
 
@@ -170,6 +173,7 @@ bool all_non_mines_shown(){ // Check of alle niet-mijnen zichtbaar zijn.
 			}
 		}
 	}
+	printf("all_non_mines_shown happen\n");
 	return check;
 }
 
@@ -178,11 +182,8 @@ void initialize_grid(int mines, int init_x, int init_y){ //initializeer GRID, ge
 
 	for(int w = 0; w< game->width; w++){
 		for(int h = 0; h< game->height; h++){
-			printf("before first init\n");
-			printf("size of game struct: %lu\n", sizeof(game));
 			GRID[w][h].mines_nearby = 0;
-			printf("after first cell\n");
-			GRID[w][h].mine  = 0;
+			GRID[w][h].mine  = false;
 			GRID[w][h].visible  = false;
 			GRID[w][h].flag = false;
 
@@ -190,7 +191,7 @@ void initialize_grid(int mines, int init_x, int init_y){ //initializeer GRID, ge
 	}
 	printf("after init struct: line 190 logic.c\n");
 
-	for(int mines_left = mines; mines_left >= 0; mines_left--){
+	for(int mines_left = mines; mines_left > 0; mines_left--){
 		printf("mines_left: %i\n", mines_left);
 		int x = rand() % game->width; // code die random vakje zoekt, waar nog geen mijn is
 		int y = rand() % game->height; 
@@ -202,13 +203,32 @@ void initialize_grid(int mines, int init_x, int init_y){ //initializeer GRID, ge
 		GRID[x][y].mine = true;
 		increment_nearby_cells(x, y);
 
-		reveal(init_x,init_y);
 
 	}
+	reveal(init_x,init_y);
 }
 bool game_not_ended(){
 	return !dead && !all_mines_covered() && !all_non_mines_shown(); 
 }
+void print_final_message(){
+	if (dead){
+		printf("You Pressed On A Mine. GAME OVER\n\n");
+		print_uncovered_field();
+	} else if (all_mines_covered()){
+		printf("All Mines Covered With Flags. You Won!\n");
+	} else if (all_non_mines_shown()){
+		printf("All non mines shown. You Won!\n");
+	}
+}
+
+void make_grid_visible(){
+	for(int w = 0; w < game->width;w++){
+		for(int h = 0; h< game->height; h++){
+			GRID[w][h].visible = true;
+		}
+	}
+}
+
 
 void read_commands(){
 	srand(time(NULL)); //geef seed aan random generator
@@ -224,14 +244,6 @@ void read_commands(){
 		scanf("%[^\n]%*c",input); 
 		process_command(input);
 	} while (input[0] != 'q' && game_not_ended());
-	if (dead){
-		printf("You Pressed On A Mine. GAME OVER\n\n");
-		print_uncovered_field();
-	} else if (all_mines_covered()){
-		printf("All Mines Covered With Flags. You Won!\n");
-	} else if (all_non_mines_shown()){
-		printf("All non mines shown. You Won!\n");
-	}
 }
 
 
