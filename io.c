@@ -1,8 +1,17 @@
 #include "cell.h"
-#include "stdio.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-void initialize_struct(int w, int h){
-	//malloc(sizeof(int) +
+void initialize_struct(int w, int h, int m){
+	game =(struct Game*) malloc(sizeof *game  + sizeof **game->grid * w * h);
+
+	printf("W: %i, H:%i, m:%i\n", w,h,m);
+
+	printf("size of game is %lu\n", sizeof **game->grid  * w * h);
+	game->mines = m;
+	game->flags_left = m; // er moeten evenveel mijnen als vlaggen zijn
+	game->width = w;
+	game->height = h;
 }
 
 
@@ -34,15 +43,15 @@ int  read_commandline_args(int argc, char *argv[]){
 			}
 
 		}
-		printf("The ARGC is %i\n", argc);
 		**++argv;
 		--argc;
 
 	}
 
 	// branch naar init struct
-	initialize_struct(width,height);
+	initialize_struct(width,height,mines);
 
+	printf("read commandline\n");
 
 	// branc naar read txt file
 	return mines;

@@ -44,10 +44,10 @@ bool initialized_grid = false;
 SDL_Window *window;
 
 int is_relevant_event(SDL_Event *event) {
-      if (event == NULL) {
-          return 0;
-      }
-    return (event->type == SDL_MOUSEBUTTONDOWN) || (event->type == SDL_QUIT);
+	if (event == NULL) {
+		return 0;
+	}
+	return (event->type == SDL_MOUSEBUTTONDOWN) || (event->type == SDL_QUIT);
 }
 
 /*
@@ -60,30 +60,28 @@ void read_init_input(int mines) {
 	while (! (SDL_PollEvent(&event) && is_relevant_event(&event))) {}
 
 	switch (event.type) {
-	case SDL_QUIT:
-		pressed_quit = true;
-		break;
+		case SDL_QUIT:
+			pressed_quit = true;
+			break;
 
-	case SDL_MOUSEBUTTONDOWN:
-		/*
-		 * De speler heeft met de muis geklikt: met de onderstaande lijn worden de coördinaten in het
-		 * het speelveld waar de speler geklikt heeft bewaard in de variabelen mouse_x en mouse_y.
-		 */
-		mouse_x = event.button.x;
-		mouse_y = event.button.y;
-		int x = mouse_x / IMAGE_WIDTH;
-		int y = mouse_y / IMAGE_HEIGHT;
-		printf("Clicked");
+		case SDL_MOUSEBUTTONDOWN:
+			/*
+			 * De speler heeft met de muis geklikt: met de onderstaande lijn worden de coördinaten in het
+			 * het speelveld waar de speler geklikt heeft bewaard in de variabelen mouse_x en mouse_y.
+			 */
+			mouse_x = event.button.x;
+			mouse_y = event.button.y;
+			int x = mouse_x / IMAGE_WIDTH;
+			int y = mouse_y / IMAGE_HEIGHT;
+			printf("entered read init input: Gui.c 59\n");
+			printf("Clicked\n");
 
-		if (event.button.button == SDL_BUTTON_RIGHT){
-			toggle_flag(x,y);
-		} else {
 			initialize_grid(mines, x, y);
+			printf("After initialize grid\n");
 			initialized_grid = true;
 
-		}
 
-		break;
+			break;
 	}
 }
 void read_input() {
@@ -103,28 +101,28 @@ void read_input() {
 	while (! (SDL_PollEvent(&event) && is_relevant_event(&event))) {}
 
 	switch (event.type) {
-	case SDL_QUIT:
-		/* De gebruiker heeft op het kruisje van het venster geklikt om de applicatie te stoppen. */
-		pressed_quit = true;
-		break;
+		case SDL_QUIT:
+			/* De gebruiker heeft op het kruisje van het venster geklikt om de applicatie te stoppen. */
+			pressed_quit = true;
+			break;
 
-	case SDL_MOUSEBUTTONDOWN:
-		/*
-		 * De speler heeft met de muis geklikt: met de onderstaande lijn worden de coördinaten in het
-		 * het speelveld waar de speler geklikt heeft bewaard in de variabelen mouse_x en mouse_y.
-		 */
-		mouse_x = event.button.x;
-		mouse_y = event.button.y;
-		int x = mouse_x / IMAGE_WIDTH;
-		int y = mouse_y / IMAGE_HEIGHT;
+		case SDL_MOUSEBUTTONDOWN:
+			/*
+			 * De speler heeft met de muis geklikt: met de onderstaande lijn worden de coördinaten in het
+			 * het speelveld waar de speler geklikt heeft bewaard in de variabelen mouse_x en mouse_y.
+			 */
+			mouse_x = event.button.x;
+			mouse_y = event.button.y;
+			int x = mouse_x / IMAGE_WIDTH;
+			int y = mouse_y / IMAGE_HEIGHT;
 
-		if(event.button.button == SDL_BUTTON_RIGHT){
-			toggle_flag(x,y);
-		} else {
-			reveal(x,y);
+			if(event.button.button == SDL_BUTTON_RIGHT){
+				toggle_flag(x,y);
+			} else {
+				reveal(x,y);
 
-		}
-		break;
+			}
+			break;
 	}
 }
 
@@ -139,33 +137,41 @@ void draw_window() {
 	 * Dit is op de plaats waar de gebruiker het laatst geklikt heeft.
 	 */
 	/* Tekent de afbeelding op die plaats. */
-	for(int x = 0; x < X_CELLS; x++){
-	   for(int y = 0; y < Y_CELLS; y++){
-	      SDL_Rect rectangle = {IMAGE_WIDTH * x, IMAGE_HEIGHT * y, IMAGE_WIDTH, IMAGE_HEIGHT };
-	      SDL_Texture * texture;
-	      char c = return_char_on(x,y,false);
-	      char c_int = c - '0';
-	      if(c == 'F'){
-		 texture = flagged_texture;
-	      }else if (c == ' '){
-		 texture = covered_texture;
-	      }else if (c_int >= 0 && c_int < 9){
-		 switch(c_int){
-		    case 0: texture = digit_0_texture; break;
-		    case 1: texture = digit_1_texture; break;
-		    case 2: texture = digit_2_texture; break;
-		    case 3: texture = digit_3_texture; break;
-		    case 4: texture = digit_4_texture; break;
-		    case 5: texture = digit_5_texture; break;
-		    case 6: texture = digit_6_texture; break;
-		    case 7: texture = digit_7_texture; break;
-		    case 8: texture = digit_8_texture; break;
+	SDL_Rect rectangle;
+	SDL_Texture * texture;
+	for(int x = 0; x < game->width; x++){
+		for(int y = 0; y < game->height; y++){
+			printf("loop happens \n");
+			SDL_Rect rectangle = {IMAGE_WIDTH * x, IMAGE_HEIGHT * y, IMAGE_WIDTH, IMAGE_HEIGHT };
+			if(initialized_grid){
+				char c = return_char_on(x,y,false);
+				printf("after ret char\n");
+				char c_int = c - '0';
+				if(c == 'F'){
+					texture = flagged_texture;
+				}else if (c == ' '){
+					texture = covered_texture;
+				}else if (c_int >= 0 && c_int < 9){
+					switch(c_int){
+						case 0: texture = digit_0_texture; break;
+						case 1: texture = digit_1_texture; break;
+						case 2: texture = digit_2_texture; break;
+						case 3: texture = digit_3_texture; break;
+						case 4: texture = digit_4_texture; break;
+						case 5: texture = digit_5_texture; break;
+						case 6: texture = digit_6_texture; break;
+						case 7: texture = digit_7_texture; break;
+						case 8: texture = digit_8_texture; break;
 
-		 }
-	      }
-	      SDL_RenderCopy(renderer, texture, NULL, &rectangle);
-	   }
+					}
+				}
+			} else {
+				texture = covered_texture;
+			}
+		SDL_RenderCopy(renderer, texture, NULL, &rectangle);
+		}
 	}
+
 
 	/*
 	 * Onderstaande code moet zeker worden uitgevoerd op het einde van deze functie.
@@ -290,15 +296,4 @@ void initialize_gui() {
 	initialize_window("Minesweeper");
 	initialize_textures();
 }
-//
-//int main(int argc, char *argv[]) {
-//	initialize_gui();
-//	while (not_quit) {
-//		draw_window();
-//		read_input();
-//	}
-//	/* Dealloceer al het geheugen dat werd aangemaakt door SDL zelf. */
-//	free_gui();
-//	return 0;
-//}
 
