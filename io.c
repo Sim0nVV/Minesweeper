@@ -1,15 +1,21 @@
-#include "cell.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include "io.h"
+
 
 void initialize_struct(int w, int h, int m){
-
 
 	game =(struct Game*) malloc(sizeof(struct Game));
 	game->grid = malloc(sizeof(struct Cell*) * w);
 
 	for(int i =0; i<w;i++){
 		game->grid[i] = malloc(sizeof(struct Cell)*h);
+		for(int j = 0; j<h; j++){
+			GRID[i][j].mines_nearby = 0;
+			GRID[i][j].mine  = false;
+			GRID[i][j].visible  = false;
+			GRID[i][j].flag = false;
+
+		}
+
 	}
 
 
@@ -29,18 +35,18 @@ int  read_commandline_args(int argc, char *argv[]){
 
 
 	while(--argc > 0 && **argv =='-'){ //eerst increment, dan dereference
-		while ((opt = *++*argv) != '\0'){ // eerst deref (meest links), dan inc, dan deref
+		if ((opt = *++*argv) != '\0'){ // eerst deref (meest links), dan inc, dan deref
 			switch (opt){
 				case 'w':
-					width = **++argv - '0';
+					width = atoi(*++argv);
 					printf("%i\n", width);
 					break;
 				case 'h':
-					height = **++argv - '0';
+					height = atoi(*++argv);
 					printf("%i\n", height);
 					break;
 				case 'm': // Deze case wordt eerste keer gecheckt
-					mines = **++argv - '0';
+					mines = atoi(*++argv);
 					printf("%i\n", mines);
 					break;
 				default:
@@ -66,12 +72,30 @@ int  read_commandline_args(int argc, char *argv[]){
 }
 
 
+void save_to_file(char *path){
+	FILE *file = fopen(path, "a");
+
+	fprintf(file,"//\n");
+	fprintf(file, "%i-%i-%i\n", game->width, game->height,game->mines);
+	for(int y = 0; y<game->height;y++){
+		printf("save to file outer loop %i\n", y);
+		for(int x = 0; x<game->width; x++){
+			if(GRID[x][y].flag){
+				fputc('F',file);
+			} else {
+				fputc('0',file);
+			}
+			fputc(return_char_on(x,y,true),file);
+			fputc('-',file);
+		}
+		fputc('\n',file);
+	}
+
+	fclose(file);
+
+}
 /*
-   void output_curr_iter(){
-
-   }
-
-   void read_txt_file(){
+   void read_txt_file( ){
 
    }
    */

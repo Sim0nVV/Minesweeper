@@ -10,13 +10,6 @@
 #include <SDL2/SDL.h>
 
 /*
- * De hoogte en breedte van het venster (in pixels).
- * Deze dimensies zijn arbitrair gekozen. Deze dimensies hangen mogelijk af van de grootte van het speelveld.
- */
-#define WINDOW_HEIGHT 300
-#define WINDOW_WIDTH 300
-
-/*
  * De hoogte en breedte (in pixels) van de afbeeldingen voor de vakjes in het speelveld die getoond worden.
  * Als je andere afbeelding wil gebruiken in je GUI, zorg er dan voor dat deze
  * dimensies ook aangepast worden.

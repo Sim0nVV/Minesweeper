@@ -75,8 +75,11 @@ void read_init_input(int mines) {
 			int x = mouse_x / IMAGE_WIDTH;
 			int y = mouse_y / IMAGE_HEIGHT;
 
+			if (event.button.button == SDL_BUTTON_RIGHT){
+				toggle_flag(x,y);
+			} 
+
 			initialize_grid(mines, x, y);
-			printf("After initialize grid\n");
 			initialized_grid = true;
 
 
@@ -195,7 +198,7 @@ void initialize_window(const char *title) {
 	}
 
 	/* Maak het venster aan met de gegeven dimensies en de gegeven titel. */
-	window = SDL_CreateWindow(title, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow(title, 0, 0, IMAGE_WIDTH * game->width, IMAGE_HEIGHT * game->height, SDL_WINDOW_SHOWN);
 
 	if (window == NULL) {
 		/* Er ging iets verkeerd bij het initialiseren. */

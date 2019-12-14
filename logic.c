@@ -60,7 +60,7 @@ void print_next_lines(bool visible){ // print het bord zelf. krijgt een boolean 
 }
 
 void print_covered_field(){ // print het veld in normale speelmodus
-	printf("\nRemaining flags: %i\n\n", flags_planted);
+	printf("\nRemaining flags: %i\n\n", game->flags_left);
 	print_first_line();
 	print_next_lines(false); // boolean geeft aan of het hele veld getoond moet worden
 }
@@ -71,21 +71,18 @@ void print_uncovered_field(){ // print het veld in 'debug mode'
 }
 
 void toggle_flag(int x,int y){ // zet een vlag aan op x- en y-coordinaat
-	if(flags_planted == 0){
+	if(game->flags_left <= 0){
 		printf("Maximum amount of planted flags reached.\n");
 		if(GRID[x][y].flag){
 			GRID[x][y].flag = !GRID[x][y].flag;
-			flags_planted += 1;
-		} else {
-			GRID[x][y].flag = !GRID[x][y].flag;
-			flags_planted -= 1;
-		}
+			game->flags_left += 1;
+		} 
 	} else if(GRID[x][y].flag) {
 		GRID[x][y].flag = !GRID[x][y].flag;
-		flags_planted += 1;
+		game->flags_left += 1;
 	} else {
 		GRID[x][y].flag = !GRID[x][y].flag;
-		flags_planted -= 1;
+		game->flags_left -= 1;
 	}
 }
 
@@ -178,14 +175,10 @@ bool all_non_mines_shown(){ // Check of alle niet-mijnen zichtbaar zijn.
 }
 
 void initialize_grid(int mines, int init_x, int init_y){ //initializeer GRID, gebeurt na eerste reveal
-	flags_planted = mines;
+	srand(time(NULL)); //geef seed aan random generator
 
 	for(int w = 0; w< game->width; w++){
 		for(int h = 0; h< game->height; h++){
-			GRID[w][h].mines_nearby = 0;
-			GRID[w][h].mine  = false;
-			GRID[w][h].visible  = false;
-			GRID[w][h].flag = false;
 
 		}
 	}
@@ -230,21 +223,6 @@ void make_grid_visible(){
 }
 
 
-void read_commands(){
-	srand(time(NULL)); //geef seed aan random generator
-	char input[6];
-	printf("Insert a Command: R for Reveal, F for Flag, P for show uncovered field\n");
-	scanf("%[^\n]%*c",input); 
-	while(input[0] != 'R' || ((SINGLE_DIGIT(input[2])) && SINGLE_DIGIT(input[4]))){ //zolang reveal command niet gegeven wordt. initializeer nog niet
-		process_command(input);
-		scanf("%[^\n]%*c",input); 
-	}
-	//initialize_grid(MINES, 1, 1);
-	do { // doe minstens 1 keer het scanf commmando.
-		scanf("%[^\n]%*c",input); 
-		process_command(input);
-	} while (input[0] != 'q' && game_not_ended());
-}
 
 
 

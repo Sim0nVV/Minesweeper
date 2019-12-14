@@ -7,3 +7,4 @@ exe.sh
 *.swp
 main
 *.o
+test.txt
