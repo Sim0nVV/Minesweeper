@@ -1,5 +1,5 @@
 CC = gcc
-OBJECTS = main.o GUI.o logic.o io.c
+OBJECTS = main.o GUI.o logic.o io.o
 
 all: $(OBJECTS)
 	$(CC) $(OBJECTS) -lSDL2 -o main

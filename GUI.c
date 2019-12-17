@@ -55,7 +55,7 @@ int is_relevant_event(SDL_Event *event) {
  * Vangt de input uit de GUI op. Deze functie is al deels geïmplementeerd, maar je moet die zelf
  * nog afwerken. Je mag natuurlijk alles aanpassen aan deze functie, inclusies return-type en argumenten.
  */
-void read_init_input(int mines) {
+void read_input() {
 	SDL_Event event;
 
 	while (! (SDL_PollEvent(&event) && is_relevant_event(&event))) {}
@@ -79,52 +79,18 @@ void read_init_input(int mines) {
 				toggle_flag(x,y);
 			} 
 
-			initialize_grid(mines, x, y);
-			initialized_grid = true;
+			if(initialized_grid == false){
 
+				initialize_grid(game->mines, x, y);
+				initialized_grid = true;
 
-			break;
-	}
-}
-void read_input() {
-	SDL_Event event;
-
-	/*
-	 * Handelt alle input uit de GUI af.
-	 * Telkens de speler een input in de GUI geeft (bv. een muisklik, muis bewegen, toets indrukken enz.)
-	 * wordt er een 'event' (van het type SDL_Event) gegenereerd dat hier wordt afgehandeld.
-	 *
-	 * Niet al deze events zijn relevant voor jou: als de muis bv. gewoon wordt bewogen, hoef
-	 * je niet te reageren op dit event.
-	 * We gebruiken daarom de is_relevant_event-functie die niet-gebruikte events wegfiltert.
-	 *
-	 * Zie ook https://wiki.libsdl.org/SDL_PollEvent en http://www.parallelrealities.co.uk/2011_09_01_archive.html
-	 */
-	while (! (SDL_PollEvent(&event) && is_relevant_event(&event))) {}
-
-	switch (event.type) {
-		case SDL_QUIT:
-			/* De gebruiker heeft op het kruisje van het venster geklikt om de applicatie te stoppen. */
-			pressed_quit = true;
-			break;
-
-		case SDL_MOUSEBUTTONDOWN:
-			/*
-			 * De speler heeft met de muis geklikt: met de onderstaande lijn worden de coördinaten in het
-			 * het speelveld waar de speler geklikt heeft bewaard in de variabelen mouse_x en mouse_y.
-			 */
-			mouse_x = event.button.x;
-			mouse_y = event.button.y;
-			int x = mouse_x / IMAGE_WIDTH;
-			int y = mouse_y / IMAGE_HEIGHT;
-
-			if(event.button.button == SDL_BUTTON_RIGHT){
-				toggle_flag(x,y);
 			} else {
 				reveal(x,y);
 				printf("reveal(%i,%i) happens \n", x, y);
 
 			}
+
+
 			break;
 	}
 }
@@ -171,7 +137,7 @@ void draw_window() {
 			} else {
 				texture = covered_texture;
 			}
-		SDL_RenderCopy(renderer, texture, NULL, &rectangle);
+			SDL_RenderCopy(renderer, texture, NULL, &rectangle);
 		}
 	}
 
