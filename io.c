@@ -1,5 +1,3 @@
-#include "io.h"
-#include "GUI.h"
 
 
 void initialize_struct(int w, int h, int m){
@@ -57,7 +55,6 @@ void init_game_from_file(FILE *file, int width, int height){
 	for(int y = 0; y < height; y++){
 		for(int x = 0; x < width; x++){
 			flag_in_file = fgetc(file);
-			while (flag_in_file != '\n' && flag_in_file != EOF){
 
 				printf("flag in file = %c\n", flag_in_file);
 				if(flag_in_file - '0'){
@@ -65,11 +62,11 @@ void init_game_from_file(FILE *file, int width, int height){
 				}
 
 				if(fgetc(file) - '0'){
-					printf("not visible\n");
+					printf("Visible\n");
 					GRID[x][y].visible = true;
 				}
 
-				switch(second_value =  read_int_from_file(file)){
+				switch(second_value = read_int_from_file(file)){
 					case 'M':
 						printf("found Mine in file\n");
 						GRID[x][y].mine = true;
@@ -79,10 +76,10 @@ void init_game_from_file(FILE *file, int width, int height){
 						GRID[x][y].mines_nearby = second_value;
 						break;
 				}
-				flag_in_file = fgetc(file);
-			}
+				printf("%i,%i,%i,%i, x: %i, y: %i\n\n", GRID[x][y].mines_nearby, GRID[x][y].mine, GRID[x][y].visible,GRID[x]    [y].flag,x,y);
 
 		}
+		fgetc(file); //read the newline
 	}
 }
 
@@ -102,6 +99,7 @@ void read_txt_file(char *path ){
 			width = read_int_from_file(file);
 			height = read_int_from_file(file);
 			mines = read_int_from_file(file);
+			fgetc(file);
 			initialize_struct(width,height,mines);
 			init_game_from_file(file,width,height);
 
@@ -154,6 +152,7 @@ void read_commandline_args(int argc, char *argv[]){
 	}
 
 	if(!read_file){
+		printf("init new struct\n");
 		if(width*height>mines)
 			initialize_struct(width,height,mines);
 		else {
@@ -187,7 +186,7 @@ void save_to_file(char *path){
 
 			if(GRID[x][y].mine){
 				fputc('M',file);
-			} else{
+			} else {
 				fputc(GRID[x][y].mines_nearby + '0',file);
 			}
 

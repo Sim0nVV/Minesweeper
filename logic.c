@@ -15,21 +15,13 @@ bool dead = false;
 // Datatype die bevat wat er op een bepaalde coordinaat is
 struct Cell;
 
-//struct Cell grid[game->width][game->height] ; //multidimensionale array van structs
-/*
-   struct Game{
-   struct Cell grid[game->width][game->height];
-   int width;
-   int height;
-   int mines;
-   };
-   */
-
 char return_char_on(int x, int y, bool visible){ // Op basis van x en y-coordinaat geeft deze de correcte char terug
 	if (GRID[x][y].flag){ 	// Boolean visible dient voor te printen met P commando (dus 'debug' mode)
 		return 'F';
 	} else if(visible || GRID[x][y].visible){
-		if (GRID[x][y].mine){
+		if (GRID[x][y].flag){
+			return 'F';
+		} else if (GRID[x][y].mine){
 			return 'M';
 		} else {
 			return GRID[x][y].mines_nearby + 48; //conversion naar char
@@ -66,6 +58,14 @@ void print_covered_field(){ // print het veld in normale speelmodus
 void print_uncovered_field(){ // print het veld in 'debug mode'
 	print_first_line();
 	print_next_lines(true); // boolean geeft aan of hele veld geprint moet worden
+}
+
+void debug_field(){
+	for(int y = 0; y <game->height; y++){
+		for(int x = 0; x < game->width; x++){
+			printf("%i,%i,%i,%i, x: %i, y: %i\n", GRID[x][y].mines_nearby, GRID[x][y].mine, GRID[x][y].visible,GRID[x][y].flag,x,y);
+		}
+	}
 }
 
 void toggle_flag(int x,int y){ // zet een vlag aan op x- en y-coordinaat

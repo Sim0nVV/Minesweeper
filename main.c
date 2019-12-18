@@ -5,7 +5,6 @@
 
 int main(int argc, char *argv[]){
 	read_commandline_args(argc,++argv);
-	print_uncovered_field();
 	if(!pressed_quit){
 		initialize_gui();
 		draw_window();
@@ -14,6 +13,7 @@ int main(int argc, char *argv[]){
 		printf("game_not_ended : %i\n", game_not_ended());
 		while (!pressed_quit &&game_not_ended()) {
 			print_covered_field();
+			print_uncovered_field();
 			draw_window();
 			read_input();
 			save_to_file("save.txt");
