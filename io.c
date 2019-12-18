@@ -3,9 +3,7 @@
 
 
 void initialize_struct(int w, int h, int m){
-
 	
-
 	game =(struct Game*) malloc(sizeof(struct Game));
 	game->grid = malloc(sizeof(struct Cell*) * w);
 
@@ -16,11 +14,9 @@ void initialize_struct(int w, int h, int m){
 			GRID[i][j].mine  = false;
 			GRID[i][j].visible  = false;
 			GRID[i][j].flag = false;
-
 		}
 
 	}
-
 
 	printf("W: %i, H:%i, m:%i\n", w,h,m);
 
@@ -40,7 +36,8 @@ int read_int_from_file(FILE *file){
 	sum = 0;
 	i = fgetc(file);
 	if(i == 'M'){
-		return i;
+		fgetc(file);
+		return 'M';
 	}
 
 	while(i != '-' && i != EOF){
@@ -56,7 +53,7 @@ int read_int_from_file(FILE *file){
 }
 
 void init_game_from_file(FILE *file, int width, int height){
-	char flag_in_file, second_value,visible;
+	char flag_in_file, second_value;
 	for(int y = 0; y < height; y++){
 		for(int x = 0; x < width; x++){
 			flag_in_file = fgetc(file);
@@ -68,15 +65,17 @@ void init_game_from_file(FILE *file, int width, int height){
 				}
 
 				if(fgetc(file) - '0'){
+					printf("not visible\n");
 					GRID[x][y].visible = true;
 				}
 
 				switch(second_value =  read_int_from_file(file)){
 					case 'M':
+						printf("found Mine in file\n");
 						GRID[x][y].mine = true;
 						break;
 					default:
-						second_value -= '0';
+						printf("%i nearby neighbours  in file\n", second_value);
 						GRID[x][y].mines_nearby = second_value;
 						break;
 				}
@@ -106,20 +105,21 @@ void read_txt_file(char *path ){
 			initialize_struct(width,height,mines);
 			init_game_from_file(file,width,height);
 
-		} else {
+		} else 
 			printf("format corrupted\n");
-		}
+		
+		initialized_grid = true;
 		fclose(file);
 	}
 
 
 }
 
-int  read_commandline_args(int argc, char *argv[]){
+void read_commandline_args(int argc, char *argv[]){
 	int opt;
 	int width, height, mines;
 	char * file;
-
+	bool read_file;
 
 	while(--argc > 0 && **argv =='-'){ //eerst increment, dan dereference
 		if ((opt = *++*argv) != '\0'){ // eerst deref (meest links), dan inc, dan deref
@@ -140,11 +140,11 @@ int  read_commandline_args(int argc, char *argv[]){
 					file = (*++argv);
 					printf("%s\n", file);
 					read_txt_file(file);
+					read_file = true;
 					break;
 				default:
 					printf("illegal option, %c\n",opt);
 					break;
-
 			}
 
 		}
@@ -153,15 +153,14 @@ int  read_commandline_args(int argc, char *argv[]){
 
 	}
 
-	// branch naar init struct
-	if(width*height>mines){
-		initialize_struct(width,height,mines);
-	} else {
-		printf("There are too much mines for the board size. Try again!\n");
-		pressed_quit = true;
+	if(!read_file){
+		if(width*height>mines)
+			initialize_struct(width,height,mines);
+		else {
+			printf("There are too much mines for the board size. Try again!\n");
+			pressed_quit = true;
+		}
 	}
-	// branc naar read txt file
-	return mines;
 
 }
 

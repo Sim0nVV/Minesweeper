@@ -45,9 +45,9 @@ bool initialized_grid = false;
 SDL_Window *window;
 
 int is_relevant_event(SDL_Event *event) {
-	if (event == NULL) {
+	if (event == NULL) 
 		return 0;
-	}
+	
 	return (event->type == SDL_MOUSEBUTTONDOWN) || (event->type == SDL_QUIT);
 }
 
@@ -75,12 +75,12 @@ void read_input() {
 			int x = mouse_x / IMAGE_WIDTH;
 			int y = mouse_y / IMAGE_HEIGHT;
 
-			if (event.button.button == SDL_BUTTON_RIGHT){
+			if (event.button.button == SDL_BUTTON_RIGHT)
 				toggle_flag(x,y);
-			} 
+			 
 
 			if(initialized_grid == false){
-
+				printf("Going to init the grid\n");
 				initialize_grid(game->mines, x, y);
 				initialized_grid = true;
 

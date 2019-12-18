@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int read_commandline_args(int argc, char *argv[]);
+void read_commandline_args(int argc, char *argv[]);
 void free_struct();
 void save_to_file(char *path);
 

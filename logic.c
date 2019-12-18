@@ -29,9 +29,7 @@ char return_char_on(int x, int y, bool visible){ // Op basis van x en y-coordina
 	if (GRID[x][y].flag){ 	// Boolean visible dient voor te printen met P commando (dus 'debug' mode)
 		return 'F';
 	} else if(visible || GRID[x][y].visible){
-		if (GRID[x][y].flag){
-			return 'F';
-		} else if (GRID[x][y].mine){
+		if (GRID[x][y].mine){
 			return 'M';
 		} else {
 			return GRID[x][y].mines_nearby + 48; //conversion naar char
@@ -111,30 +109,6 @@ void reveal(int x, int y){ // reveal functie
 	}
 }
 
-
-void process_command(char *input){ //input parser
-	if(!((SINGLE_DIGIT(input[2])) && SINGLE_DIGIT(input[4]))){ // check zodat getallen tussen 0 en 9 zijn
-		char command = input[0]; // probleem met uitlezen string
-		switch (command){
-			case 'P':
-				print_uncovered_field();
-				break;
-			case 'F':
-				toggle_flag(INPUT_TO_INT(2), INPUT_TO_INT(4)); //We geven geen getallen in groter dan 9
-				print_covered_field();
-				break;
-			case 'R':
-				reveal(INPUT_TO_INT(2),INPUT_TO_INT(4));
-				print_covered_field();
-				break;
-			default:
-				printf("Not a known commando\n");
-
-		}
-	} else {
-		printf("You haven't entered digits between 0 and 9");
-	}
-}
 
 void increment_nearby_cells(int x, int y){ //Telkens een mijn toegevoegd wordt. incrementeer buren
 	for(int i = x - 1; i < x + 2; i++){ 

@@ -5,14 +5,13 @@
 
 int main(int argc, char *argv[]){
 	read_commandline_args(argc,++argv);
+	print_uncovered_field();
 	if(!pressed_quit){
 		initialize_gui();
+		draw_window();
+		read_input();
 
-		while(!initialized_grid && !pressed_quit){
-			draw_window();
-			read_input();
-		}
-		save_to_file("save.txt");
+		printf("game_not_ended : %i\n", game_not_ended());
 		while (!pressed_quit &&game_not_ended()) {
 			print_covered_field();
 			draw_window();
@@ -22,6 +21,7 @@ int main(int argc, char *argv[]){
 		print_final_message();
 		make_grid_visible();
 		draw_window();
+		printf("game_not_ended : %i\n", game_not_ended());
 
 		if(!pressed_quit){
 			draw_window();
