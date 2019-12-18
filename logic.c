@@ -113,11 +113,6 @@ bool all_non_mines_shown(){ // Check of alle niet-mijnen zichtbaar zijn.
 void initialize_grid(int mines, int init_x, int init_y){ //initializeer GRID, gebeurt na eerste reveal
 	srand(time(NULL)); //geef seed aan random generator
 
-	for(int w = 0; w< game->width; w++){
-		for(int h = 0; h< game->height; h++){
-
-		}
-	}
 	for(int mines_left = mines; mines_left > 0; mines_left--){
 		printf("mines_left: %i\n", mines_left);
 		int x = rand() % game->width; // code die random vakje zoekt, waar nog geen mijn is

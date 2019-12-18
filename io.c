@@ -10,9 +10,10 @@ void initialize_struct(int w, int h, int m){
 	game->grid = malloc(sizeof(struct Cell*) * w);
 
 	for(int i =0; i<w;i++){
-		game->grid[i] = malloc(sizeof(struct Cell)*h);
+		GRID[i] = malloc(sizeof(struct Cell)*h);
+
 		for(int j = 0; j<h; j++){
-			GRID[i][j].mines_nearby = 0;
+			GRID[i][j].mines_nearby = 0; //(GRID == game->grid)
 			GRID[i][j].mine  = false;
 			GRID[i][j].visible  = false;
 			GRID[i][j].flag = false;
@@ -216,7 +217,6 @@ void save_to_file(char *path){
  * Frees all dynamically allocated memory by the struct
  */
 void free_struct(){
-	//TODO: Vraag nog eens na of dit correct is
 	for(int i =0; i<game->width;i++){
 		free(game->grid[i]);
 	}
