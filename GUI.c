@@ -75,21 +75,21 @@ void read_input() {
 			int x = mouse_x / IMAGE_WIDTH;
 			int y = mouse_y / IMAGE_HEIGHT;
 
-			if (event.button.button == SDL_BUTTON_RIGHT)
+			if (event.button.button == SDL_BUTTON_RIGHT){
+				if(initialized_grid == false){
+					initialize_grid(game->mines, x, y);
+					initialized_grid = true;
+				}
 				toggle_flag(x,y);
-			 
-
-			if(initialized_grid == false){
-				printf("Going to init the grid\n");
-				initialize_grid(game->mines, x, y);
-				initialized_grid = true;
-
 			} else {
+				if(initialized_grid == false){
+					initialize_grid(game->mines, x, y);
+					initialized_grid = true;
+				} else{
 				reveal(x,y);
 				printf("reveal(%i,%i) happens \n", x, y);
-
+				}
 			}
-
 
 			break;
 	}

@@ -1,4 +1,5 @@
-
+#include "io.h"
+#include "GUI.h"
 
 void initialize_struct(int w, int h, int m){
 	
@@ -168,7 +169,7 @@ void save_to_file(char *path){
 	FILE *file = fopen(path, "w");
 
 	fprintf(file,"//\n");
-	fprintf(file, "%i-%i-%i-\n", game->width, game->height,game->mines);
+	fprintf(file, "%i-%i-%i-%i-\n", game->width, game->height,game->mines,game->flags_left);
 	for(int y = 0; y<game->height;y++){
 		printf("save to file outer loop %i\n", y);
 		for(int x = 0; x<game->width; x++){

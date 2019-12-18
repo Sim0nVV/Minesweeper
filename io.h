@@ -3,6 +3,7 @@
 
 #include "cell.h"
 #include "logic.h"
+#include "GUI.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

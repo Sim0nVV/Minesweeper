@@ -9,7 +9,6 @@
 #define INPUT_TO_INT(i)		input[i] - 48
 #define SINGLE_DIGIT(i) 	(0 <= i && i <= 9)
 
-int flags_planted; 
 bool dead = false;
 
 // Datatype die bevat wat er op een bepaalde coordinaat is
