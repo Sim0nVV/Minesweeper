@@ -30,42 +30,7 @@ char return_char_on(int x, int y, bool visible){ // Op basis van x en y-coordina
 	}
 }
 
-void print_first_line(){ // functie print de eerste lijn van het bord (met x-coordinaten dus)
-	printf("   ");
-	for(int i = 0; i<game->width; i++){
-		printf(" %i  ", i);
-	}
-	printf("\n");
-}
 
-void print_next_lines(bool visible){ // print het bord zelf. krijgt een boolean binnen die moet tekenen als het P commando gebeurde
-	for(int y = 0; y<game->height; y++){
-		printf("%i ", y);
-		for(int x = 0; x<game->width; x++){
-			printf("| %c|", return_char_on(x,y,visible)); 
-		}	
-		printf("\n");
-	}
-}
-
-void print_covered_field(){ // print het veld in normale speelmodus
-	printf("\nRemaining flags: %i\n\n", game->flags_left);
-	print_first_line();
-	print_next_lines(false); // boolean geeft aan of het hele veld getoond moet worden
-}
-
-void print_uncovered_field(){ // print het veld in 'debug mode'
-	print_first_line();
-	print_next_lines(true); // boolean geeft aan of hele veld geprint moet worden
-}
-
-void debug_field(){
-	for(int y = 0; y <game->height; y++){
-		for(int x = 0; x < game->width; x++){
-			printf("%i,%i,%i,%i, x: %i, y: %i\n", GRID[x][y].mines_nearby, GRID[x][y].mine, GRID[x][y].visible,GRID[x][y].flag,x,y);
-		}
-	}
-}
 
 void toggle_flag(int x,int y){ // zet een vlag aan op x- en y-coordinaat
 	if(game->flags_left <= 0){
@@ -130,7 +95,6 @@ bool all_mines_covered(){ // Check als alle mijnen met vlaggen bedekt zijn
 			}
 		}
 	}
-	printf("all mines covered happen\n");
 	return check;
 }
 
@@ -143,7 +107,6 @@ bool all_non_mines_shown(){ // Check of alle niet-mijnen zichtbaar zijn.
 			}
 		}
 	}
-	printf("all_non_mines_shown happen\n");
 	return check;
 }
 
@@ -155,8 +118,6 @@ void initialize_grid(int mines, int init_x, int init_y){ //initializeer GRID, ge
 
 		}
 	}
-	printf("after init struct: line 190 logic.c\n");
-
 	for(int mines_left = mines; mines_left > 0; mines_left--){
 		printf("mines_left: %i\n", mines_left);
 		int x = rand() % game->width; // code die random vakje zoekt, waar nog geen mijn is
@@ -179,7 +140,6 @@ bool game_not_ended(){
 void print_final_message(){
 	if (dead){
 		printf("You Pressed On A Mine. GAME OVER\n\n");
-		print_uncovered_field();
 	} else if (all_mines_covered()){
 		printf("All Mines Covered With Flags. You Won!\n");
 	} else if (all_non_mines_shown()){

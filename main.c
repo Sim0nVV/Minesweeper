@@ -10,10 +10,7 @@ int main(int argc, char *argv[]){
 		draw_window();
 		read_input();
 
-		printf("game_not_ended : %i\n", game_not_ended());
 		while (!pressed_quit &&game_not_ended()) {
-			print_covered_field();
-			print_uncovered_field();
 			draw_window();
 			read_input();
 			save_to_file("save.txt");
@@ -21,7 +18,6 @@ int main(int argc, char *argv[]){
 		print_final_message();
 		make_grid_visible();
 		draw_window();
-		printf("game_not_ended : %i\n", game_not_ended());
 
 		if(!pressed_quit){
 			draw_window();

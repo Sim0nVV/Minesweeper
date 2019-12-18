@@ -8,7 +8,7 @@
  */
 SDL_Renderer *renderer;
 
-/* De afbeelding die een vakje met een "1" in voorstelt. */
+/* Alle afbeeldingen. */
 SDL_Texture *digit_0_texture;
 SDL_Texture *digit_1_texture;
 SDL_Texture *digit_2_texture;
@@ -66,10 +66,7 @@ void read_input() {
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
-			/*
-			 * De speler heeft met de muis geklikt: met de onderstaande lijn worden de coördinaten in het
-			 * het speelveld waar de speler geklikt heeft bewaard in de variabelen mouse_x en mouse_y.
-			 */
+
 			mouse_x = event.button.x;
 			mouse_y = event.button.y;
 			int x = mouse_x / IMAGE_WIDTH;
@@ -86,8 +83,7 @@ void read_input() {
 					initialize_grid(game->mines, x, y);
 					initialized_grid = true;
 				} else{
-				reveal(x,y);
-				printf("reveal(%i,%i) happens \n", x, y);
+					reveal(x,y);
 				}
 			}
 
