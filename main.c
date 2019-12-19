@@ -3,9 +3,14 @@
 #include "io.h"
 #include <unistd.h> //for sleep function
 
+
+
+
 int main(int argc, char *argv[]){
 	read_commandline_args(argc,++argv);
+
 	if(!pressed_quit){
+
 		initialize_gui();
 		draw_window();
 		read_input();
@@ -15,8 +20,12 @@ int main(int argc, char *argv[]){
 			read_input();
 			save_to_file("save.txt");
 		}
+
 		print_final_message();
-		make_grid_visible();
+		/* 
+		 * Show final game en then quit
+		 */
+		make_grid_visible(); 
 		draw_window();
 
 		if(!pressed_quit){

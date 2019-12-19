@@ -25,12 +25,13 @@ char return_char_on(int x, int y, bool visible){ // Op basis van x en y-coordina
 		} else {
 			return GRID[x][y].mines_nearby + 48; //conversion naar char
 		}
-	}else { 
+	} else { 
 		return ' ';
 	}
 }
-
-
+/*
+ * Toggles the flag on given x and y coordinates
+ */
 
 void toggle_flag(int x,int y){ // zet een vlag aan op x- en y-coordinaat
 	if(game->flags_left <= 0){
@@ -47,9 +48,8 @@ void toggle_flag(int x,int y){ // zet een vlag aan op x- en y-coordinaat
 		game->flags_left -= 1;
 	}
 }
-
 void reveal(int x, int y){ // reveal functie 
-	if(!GRID[x][y].flag){ // kan alleen maar reveaelen op plaats zonder vlag
+	if(!GRID[x][y].flag){ // kan alleen maar revealen op plaats zonder vlag
 		if(GRID[x][y].mines_nearby > 0 && !GRID[x][y].mine){
 			GRID[x][y].visible = true;
 		} else if (GRID[x][y].mine){
@@ -72,9 +72,11 @@ void reveal(int x, int y){ // reveal functie
 		}
 	}
 }
-
-
-void increment_nearby_cells(int x, int y){ //Telkens een mijn toegevoegd wordt. incrementeer buren
+/*
+ * Algorithm to increase nearby neighbour count
+ * Selects all neighbours and goes increments them
+ */
+void increment_nearby_cells(int x, int y){ 
 	for(int i = x - 1; i < x + 2; i++){ 
 		for(int j = y - 1; j< y + 2; j++){
 			BOUNDARIES(i,j)
@@ -86,7 +88,10 @@ void increment_nearby_cells(int x, int y){ //Telkens een mijn toegevoegd wordt. 
 		}
 	}
 }
-bool all_mines_covered(){ // Check als alle mijnen met vlaggen bedekt zijn
+/*
+ * Check for letting the game end
+ */
+bool all_mines_covered(){  
 	bool check = true;
 	for(int x = 0; x< game->width; x++){
 		for(int y = 0; y<game->height; y++){
@@ -97,8 +102,10 @@ bool all_mines_covered(){ // Check als alle mijnen met vlaggen bedekt zijn
 	}
 	return check;
 }
-
-bool all_non_mines_shown(){ // Check of alle niet-mijnen zichtbaar zijn.
+/*
+ * Endgame check.
+ */
+bool all_non_mines_shown(){ 
 	bool check = true;
 	for(int x = 0; x< game->width; x++){
 		for(int y = 0; y<game->height; y++){
@@ -109,16 +116,18 @@ bool all_non_mines_shown(){ // Check of alle niet-mijnen zichtbaar zijn.
 	}
 	return check;
 }
+/*
+ * Initializes grid. Adds mines only if there hasn't been added one before. 
+ */
 
 void initialize_grid(int mines, int init_x, int init_y){ //initializeer GRID, gebeurt na eerste reveal
 	srand(time(NULL)); //geef seed aan random generator
 
 	for(int mines_left = mines; mines_left > 0; mines_left--){
-		printf("mines_left: %i\n", mines_left);
-		int x = rand() % game->width; // code die random vakje zoekt, waar nog geen mijn is
+		int x = rand() % game->width; 
 		int y = rand() % game->height; 
 
-		while(GRID[x][y].mine || (init_x == x && init_y == y)){ // op die plaats mag er al geen mijn zijn en moet geldige plaats zijn
+		while(GRID[x][y].mine || (init_x == x && init_y == y)){ 
 			x = rand() % game->width; 
 			y = rand() % game->height; 
 		} 
@@ -129,6 +138,9 @@ void initialize_grid(int mines, int init_x, int init_y){ //initializeer GRID, ge
 	}
 	reveal(init_x,init_y);
 }
+/*
+ * Function included in main to check whether game is over or not
+ */
 bool game_not_ended(){
 	return !dead && !all_mines_covered() && !all_non_mines_shown(); 
 }
@@ -142,6 +154,9 @@ void print_final_message(){
 	}
 }
 
+/*
+ * Just before ending, this shows the whole grid
+ */
 void make_grid_visible(){
 	for(int w = 0; w < game->width;w++){
 		for(int h = 0; h< game->height; h++){

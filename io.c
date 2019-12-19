@@ -43,7 +43,6 @@ int read_int_from_file(FILE *file){
 	}
 
 	while(i != '-' && i != EOF){
-		printf("sum: %i, i: %c\n", sum, i);
 		i -= '0';
 		sum *= 10;
 		sum += i;

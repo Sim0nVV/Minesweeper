@@ -52,8 +52,7 @@ int is_relevant_event(SDL_Event *event) {
 }
 
 /*
- * Vangt de input uit de GUI op. Deze functie is al deels geïmplementeerd, maar je moet die zelf
- * nog afwerken. Je mag natuurlijk alles aanpassen aan deze functie, inclusies return-type en argumenten.
+ * Vangt de input uit de GUI op. 
  */
 void read_input() {
 	SDL_Event event;
@@ -72,19 +71,15 @@ void read_input() {
 			int x = mouse_x / IMAGE_WIDTH;
 			int y = mouse_y / IMAGE_HEIGHT;
 
+			if(!initialized_grid){ //initialise grid call - only happens the first time this function is called
+				initialize_grid(game->mines, x, y);
+				initialized_grid = true;
+			}
+
 			if (event.button.button == SDL_BUTTON_RIGHT){
-				if(initialized_grid == false){
-					initialize_grid(game->mines, x, y);
-					initialized_grid = true;
-				}
 				toggle_flag(x,y);
-			} else {
-				if(initialized_grid == false){
-					initialize_grid(game->mines, x, y);
-					initialized_grid = true;
-				} else{
-					reveal(x,y);
-				}
+			} else if (initialized_grid) {
+				reveal(x,y);
 			}
 
 			break;
@@ -207,9 +202,7 @@ void free_gui() {
 void initialize_textures() {
 
 	/*
-	 * Laadt de afbeeldingen in. In deze minimalistische applicatie laden we slechts 1 afbeelding in.
-	 * Indien de afbeelding niet kon geladen worden (bv. omdat het pad naar de afbeelding verkeerd is),
-	 * geeft SDL_LoadBMP een NULL-pointer terug.
+	 * Laadt de afbeeldingen in. 
 	 */
 	SDL_Surface* digit_0_texture_path = SDL_LoadBMP("Images/0.bmp");
 	SDL_Surface* digit_1_texture_path = SDL_LoadBMP("Images/1.bmp");
@@ -227,7 +220,6 @@ void initialize_textures() {
 
 	/*
 	 * Zet deze afbeelding om naar een texture die getoond kan worden in het venster.
-	 * Indien de texture niet kon omgezet worden, geeft de functie een NULL-pointer terug.
 	 * */
 	digit_0_texture = SDL_CreateTextureFromSurface(renderer, digit_0_texture_path);
 	digit_1_texture = SDL_CreateTextureFromSurface(renderer, digit_1_texture_path);
@@ -259,7 +251,6 @@ void initialize_textures() {
 
 /*
  * Initialiseert onder het venster waarin het speelveld getoond zal worden, en de texture van de afbeelding die getoond zal worden.
- * Deze functie moet aangeroepen worden aan het begin van het spel, vooraleer je de spelwereld begint te tekenen.
  */
 void initialize_gui() {
 	initialize_window("Minesweeper");
